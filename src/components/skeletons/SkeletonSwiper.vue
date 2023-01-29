@@ -24,8 +24,26 @@ export default {
     width: 100%;
     height: 294px;
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1439px) {
+      height: 272px;
+
       &:nth-child(3) {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 1280px) {
+      height: 250px;
+    }
+
+    @media screen and (max-width: 1024px) {
+      height: 187px;
+    }
+
+    @media screen and (max-width: 767px) {
+      height: 143px;
+
+      &:nth-child(2) {
         display: none;
       }
     }

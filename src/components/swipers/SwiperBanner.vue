@@ -21,9 +21,7 @@
         </svg>
       </button>
     </div>
-    <div class="swiper__pagination">
-
-    </div>
+    <div class="swiper__pagination"></div>
   </div>
 </template>
 
@@ -85,6 +83,13 @@ export default {
       height: 100%;
       min-width: 100%;
       object-fit: cover;
+      transition: transform .6s ease-in-out;
+    }
+
+    &:hover {
+      img {
+        transform: scale(1.1);
+      }
     }
   }
 

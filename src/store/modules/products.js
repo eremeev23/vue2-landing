@@ -2,12 +2,13 @@ import axios from 'axios';
 
 export const products = {
   state: {
-    products: []
+    products: [],
+    productsError: null,
   },
 
   mutations: {
     SET_PRODUCTS (state, data) {
-      state.products = data.products;
+      state.products = data;
     }
   },
 
@@ -18,9 +19,12 @@ export const products = {
       try {
         await axios
           .get('https://dummyjson.com/products?limit=100')
-          .then(({ data }) => commit('SET_PRODUCTS', data))
+          .then(({ data }) => {
+            commit('SET_PRODUCTS', data.products);
+            window.localStorage.setItem('products', JSON.stringify(data.products));
+          })
       } catch (err) {
-        console.log(err)
+        state.productsError = 'There is no data';
       }
     }
   }

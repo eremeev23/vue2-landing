@@ -1,8 +1,10 @@
-import axios from 'axios'
+import Vue from 'vue';
+import axios from 'axios';
 
 export const dogs = {
   state: {
-    dogs: []
+    dogs: [],
+    dogsError: null
   },
 
   mutations: {
@@ -10,6 +12,10 @@ export const dogs = {
       const fileFormat = dog.url.split('.').reverse()[0].toLowerCase();
       if (fileFormat !== 'mp4' && fileFormat !== 'gif' && fileFormat !== 'webm') {
         state.dogs = [...state.dogs, dog];
+      }
+      // Saving dogs list in cookies
+      if (state.dogs.length === 10) {
+        Vue.prototype.$cookies.set('vue_dogs', JSON.stringify(state.dogs));
       }
     }
   },
@@ -23,7 +29,7 @@ export const dogs = {
             .then(({ data }) => commit('SET_NEW_DOG', data))
         }
       } catch (err) {
-        console.log(err)
+        state.dogsError = 'There is no data';
       }
     }
   }

@@ -3,14 +3,14 @@
     <div class="container">
       <section class="main-page__banner">
         <SwiperBanner
-          v-if="dogs.length === 10"
+          v-if="dogs?.length === 10"
           :slides="dogs"
         />
         <SkeletonSwiper v-else />
       </section>
       <section class="main-page__products">
         <ProductsList
-          v-if="products.length"
+          v-if="products?.length"
           :products="products"
         />
         <SkeletonList v-else />
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import SwiperBanner from '@/components/swipers/SwiperBanner.vue';
 import SkeletonSwiper from '@/components/skeletons/SkeletonSwiper.vue';
 import SkeletonList from '@/components/skeletons/SkeletonList.vue';
@@ -44,12 +44,27 @@ export default {
   },
 
   methods: {
-    ...mapActions(['DOGS_REQUEST', 'PRODUCTS_REQUEST'])
+    ...mapActions(['DOGS_REQUEST', 'PRODUCTS_REQUEST']),
+    ...mapMutations(['SET_NEW_DOG', 'SET_PRODUCTS'])
   },
 
   created () {
-    this.DOGS_REQUEST();
-    this.PRODUCTS_REQUEST();
+    // DOGS AND COOKIES
+    const localDogs = this.$cookies.get('vue_dogs');
+    if (!localDogs) {
+      this.DOGS_REQUEST();
+    } else {
+      for (let i = 0; i < 10; i++) {
+        this.SET_NEW_DOG(localDogs[i]);
+      }
+    }
+    // PRODUCTS AND LOCAL STORAGE
+    const localProducts = JSON.parse(window.localStorage.getItem('products'));
+    if (!localProducts) {
+      this.PRODUCTS_REQUEST();
+    } else {
+      this.SET_PRODUCTS(localProducts);
+    }
   },
 }
 </script>
